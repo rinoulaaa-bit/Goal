@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Έλλειμμα 77.000</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --card: #111;
+      --card2: #181818;
+      --text: #f5f5f5;
+      --muted: #9b9b9b;
+      --line: #2a2a2a;
+      --green: #22c55e;
+      --red: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 18px;
+    }
+
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .date {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    }
+
+    .big-number {
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin: 6px 0 0;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .progress-wrap {
+      margin-top: 16px;
+      height: 14px;
+      background: #242424;
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid #303030;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: var(--green);
+      border-radius: 99px;
+      transition: width 0.25s ease;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini {
+      background: #0f0f0f;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .mini strong {
+      display: block;
+      font-size: 22px;
+      margin-top: 5px;
+    }
+
+    input {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #0b0b0b;
+      color: white;
+      padding: 16px;
+      font-size: 22px;
+      outline: none;
+    }
+
+    input:focus { border-color: var(--green); }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #04110a;
+      background: var(--green);
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    .secondary {
+      background: #1f1f1f;
+      color: white;
+      border: 1px solid var(--line);
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 9px 0;
+      border-bottom: 1px solid #202020;
+    }
+
+    .row:last-child { border-bottom: 0; }
+
+    .history-title {
+      font-size: 15px;
+      margin: 6px 0 10px;
+      color: var(--muted);
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #202020;
+      font-size: 14px;
+    }
+
+    .history-item:last-child { border-bottom: 0; }
+
+    .good { color: var(--green); }
+    .bad { color: var(--red); }
+
+    .settings {
+      display: none;
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="top">
+      <div>
+        <h1>Έλλειμμα 77.000</h1>
+        <div class="date" id="todayText"></div>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="label">Πρόοδος προς τον στόχο</div>
+      <div class="big-number" id="percentText">0%</div>
+      <div class="progress-wrap">
+        <div class="progress" id="progressBar"></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="mini">
+        <div class="label">Σύνολο ελλείμματος</div>
+        <strong id="totalDeficit">0</strong>
+      </div>
+      <div class="mini">
+        <div class="label">Απομένουν</div>
+        <strong id="remainingDeficit">77.000</strong>
+      </div>
+      <div class="mini">
+        <div class="label">Μέρες που απομένουν</div>
+        <strong id="daysLeft">0</strong>
+      </div>
+      <div class="mini">
+        <div class="label">Μέσος όρος/μέρα που θέλει</div>
+        <strong id="neededPerDay">0</strong>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="label">Σημερινό έλλειμμα</div>
+      <input id="deficitInput" type="number" inputmode="numeric" placeholder="π.χ. 690" />
+      <button id="saveBtn">Αποθήκευση ημέρας</button>
+      <button class="secondary" id="settingsBtn">Ρυθμίσεις</button>
+      <div class="small">Βάζεις μόνο πόσο έλλειμμα έκανες σήμερα. Όλα τα άλλα τα υπολογίζει μόνο του.</div>
+    </section>
+
+    <section class="card settings" id="settingsBox">
+      <div class="label">Στόχος ελλείμματος</div>
+      <input id="goalInput" type="number" inputmode="numeric" />
+      <div class="label" style="margin-top:12px">Ημερομηνία λήξης</div>
+      <input id="endInput" type="date" />
+      <button id="saveSettingsBtn">Αποθήκευση ρυθμίσεων</button>
+    </section>
+
+    <section class="card">
+      <div class="history-title">Τελευταίες καταχωρήσεις</div>
+      <div id="history"></div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'simple_deficit_tracker_v1';
+    const SETTINGS_KEY = 'simple_deficit_settings_v1';
+
+    const defaultSettings = {
+      goal: 77000,
+      endDate: '2026-11-29'
+    };
+
+    const defaultEntries = {
+      '2026-08-10': 600,
+      '2026-08-11': 800
+    };
+
+    const todayISO = () => {
+      const d = new Date();
+      const tz = d.getTimezoneOffset() * 60000;
+      return new Date(d - tz).toISOString().slice(0, 10);
+    };
+
+    const formatNumber = (n) => Math.round(n).toLocaleString('el-GR');
+
+    const loadData = () => {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const merged = { ...defaultEntries, ...stored };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+      return merged;
+    };
+    const saveData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    const loadSettings = () => ({
+      ...defaultSettings,
+      ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')
+    });
+    const saveSettings = (settings) => localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+
+    const today = todayISO();
+    let data = loadData();
+    let settings = loadSettings();
+
+    const todayText = document.getElementById('todayText');
+    const percentText = document.getElementById('percentText');
+    const progressBar = document.getElementById('progressBar');
+    const totalDeficit = document.getElementById('totalDeficit');
+    const remainingDeficit = document.getElementById('remainingDeficit');
+    const daysLeft = document.getElementById('daysLeft');
+    const neededPerDay = document.getElementById('neededPerDay');
+    const deficitInput = document.getElementById('deficitInput');
+    const saveBtn = document.getElementById('saveBtn');
+    const history = document.getElementById('history');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsBox = document.getElementById('settingsBox');
+    const goalInput = document.getElementById('goalInput');
+    const endInput = document.getElementById('endInput');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+
+    function daysBetweenTodayAndEnd(endDate) {
+      const start = new Date(today + 'T00:00:00');
+      const end = new Date(endDate + 'T00:00:00');
+      const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+      return Math.max(diff, 0);
+    }
+
+    function render() {
+      data = loadData();
+      settings = loadSettings();
+
+      const entries = Object.entries(data).sort(([a], [b]) => b.localeCompare(a));
+      const total = entries.reduce((sum, [, value]) => sum + Number(value || 0), 0);
+      const remaining = Math.max(settings.goal - total, 0);
+      const percent = Math.min((total / settings.goal) * 100, 100);
+      const leftDays = daysBetweenTodayAndEnd(settings.endDate);
+      const needed = leftDays > 0 ? remaining / leftDays : remaining;
+
+      const todayLabel = new Date(today + 'T00:00:00').toLocaleDateString('el-GR', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+      });
+
+      todayText.textContent = todayLabel;
+      percentText.textContent = percent.toFixed(1).replace('.', ',') + '%';
+      progressBar.style.width = percent + '%';
+      totalDeficit.textContent = formatNumber(total);
+      remainingDeficit.textContent = formatNumber(remaining);
+      daysLeft.textContent = formatNumber(leftDays);
+      neededPerDay.textContent = formatNumber(needed);
+      deficitInput.value = data[today] || '';
+
+      goalInput.value = settings.goal;
+      endInput.value = settings.endDate;
+
+      if (entries.length === 0) {
+        history.innerHTML = '<div class="small">Δεν έχεις καταχώρηση ακόμα.</div>';
+      } else {
+        history.innerHTML = entries.slice(0, 10).map(([date, value]) => {
+          const d = new Date(date + 'T00:00:00').toLocaleDateString('el-GR', { day: '2-digit', month: '2-digit' });
+          return `<div class="history-item"><span>${d}</span><strong>${formatNumber(value)} kcal</strong></div>`;
+        }).join('');
+      }
+    }
+
+    saveBtn.addEventListener('click', () => {
+      const value = Number(deficitInput.value || 0);
+      const current = loadData();
+      if (value <= 0) {
+        delete current[today];
+      } else {
+        current[today] = value;
+      }
+      saveData(current);
+      render();
+    });
+
+    deficitInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveBtn.click();
+    });
+
+    settingsBtn.addEventListener('click', () => {
+      settingsBox.style.display = settingsBox.style.display === 'block' ? 'none' : 'block';
+    });
+
+    saveSettingsBtn.addEventListener('click', () => {
+      saveSettings({
+        goal: Number(goalInput.value || 77000),
+        endDate: endInput.value || '2026-11-29'
+      });
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
